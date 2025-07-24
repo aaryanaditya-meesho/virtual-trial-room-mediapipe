@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Shoulder Distance API
+  shoulder-distance-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shoulder_distance_api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app
+      - ./calibration.json:/app/calibration.json
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    networks:
+      - shoulder_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: shoulder_distance_nginx
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # Mount SSL certificates if available
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - shoulder-distance-api
+    networks:
+      - shoulder_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for session storage (optional, for scaling)
+  redis:
+    image: redis:alpine
+    container_name: shoulder_distance_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - shoulder_network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:
+  nginx_logs:
+
+networks:
+  shoulder_network:
+    driver: bridge 

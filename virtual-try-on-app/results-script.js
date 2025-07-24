@@ -104,9 +104,9 @@ function updateImages(result) {
     const confidenceScore = document.getElementById('confidenceScore');
     
     // Update image sources with error handling
-    updateImageWithFallback(userImage, result.userImage, '../blue_shirt.png');
-    updateImageWithFallback(clothImage, result.clothImage, '../red_tshirt.png');
-    updateImageWithFallback(resultImage, result.resultImage, '../green_striped.png');
+    updateImageWithFallback(userImage, result.userImage, 'blue_shirt.png');
+    updateImageWithFallback(clothImage, result.clothImage, 'red_tshirt.png');
+    updateImageWithFallback(resultImage, result.resultImage, 'green_striped.png');
     
     // Update confidence score
     confidenceScore.innerHTML = `<i class="fas fa-star"></i> ${result.confidence}% Match`;
@@ -226,7 +226,7 @@ function createComparisonModal() {
             <div class="comparison-grid">
                 ${availableResults.map(result => `
                     <div class="comparison-item ${result.id === currentResultIndex ? 'active' : ''}">
-                        <img src="${result.resultImage}" alt="Result ${result.id}" onerror="this.src='../green_striped.png'">
+                        <img src="${result.resultImage}" alt="Result ${result.id}" onerror="this.src='green_striped.png'">
                         <div class="comparison-info">
                             <strong>Result ${result.id}</strong>
                             <span>${result.confidence}% Match</span>
