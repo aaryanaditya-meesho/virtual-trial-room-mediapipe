@@ -1136,4 +1136,273 @@ body {
         width: 100%;
         max-width: 200px;
     }
+}
+
+/* Custom Upload Section Styles */
+.custom-upload-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+    border-radius: 20px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.custom-upload-section.hidden {
+    display: none !important;
+}
+
+.upload-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.upload-title {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.upload-title i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--accent-color), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.upload-title h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+.upload-title p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.upload-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.upload-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.upload-area {
+    padding: 60px 40px;
+    text-align: center;
+    border: 3px dashed var(--accent-color);
+    border-radius: 15px;
+    margin: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+}
+
+.upload-area:hover {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 4rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.upload-area h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.upload-area p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+
+.upload-area small {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.upload-instructions {
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.upload-instructions h4 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-instructions h4 i {
+    color: var(--accent-color);
+}
+
+.upload-instructions ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.upload-instructions li {
+    padding: 8px 0;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-instructions li i {
+    color: #10b981;
+    font-size: 0.9rem;
+}
+
+.upload-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.benefit {
+    background: linear-gradient(135deg, var(--accent-color), #8b5cf6);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.uploaded-items {
+    margin-top: 60px;
+    padding: 0 20px;
+}
+
+.uploaded-items h4 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.uploaded-items h4 i {
+    color: var(--accent-color);
+}
+
+.uploaded-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.uploaded-item {
+    position: relative;
+}
+
+.custom-badge {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+
+.upload-date {
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+
+/* Responsive Design for Upload Section */
+@media (max-width: 768px) {
+    .upload-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 15px;
+    }
+    
+    .upload-area {
+        padding: 40px 20px;
+        margin: 15px;
+    }
+    
+    .upload-instructions {
+        padding: 30px 20px;
+    }
+    
+    .uploaded-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .upload-title h3 {
+        font-size: 2rem;
+    }
+    
+    .upload-title p {
+        font-size: 1rem;
+    }
 } 

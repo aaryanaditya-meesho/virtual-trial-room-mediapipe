@@ -1,7 +1,7 @@
 # Core MediaPipe dependencies
 mediapipe>=0.10.21
 opencv-python>=4.10.0.84
-numpy>=1.26.0
+numpy>=1.26.0 
 
 # Flask web framework dependencies  
 flask>=2.3.0
