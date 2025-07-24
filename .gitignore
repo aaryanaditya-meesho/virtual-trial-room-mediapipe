@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific - Generated files
+*.mp4
+*.avi
+*.mov
+shoulder_distance_*.jpg
+trial_room_*.jpg
+advanced_trial_*.jpg
+test_result.jpg
+test_pose.jpg
+calibration.json
+
+# Keep test shirt images (needed for demo)
+# blue_shirt.png, red_tshirt.png, etc. will be included 
