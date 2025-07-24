@@ -1,0 +1,6 @@
+@echo off
+cd /d "%~dp0"
+echo 🚀 Starting Shoulder Distance Measurement Tool...
+echo 📏 Opening webcam for body measurements...
+python shoulder_distance.py
+pause 

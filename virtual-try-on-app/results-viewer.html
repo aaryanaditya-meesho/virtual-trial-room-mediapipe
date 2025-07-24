@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On Results</title>
+    <link rel="stylesheet" href="results-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1>✂️ Virtual Try-On Results</h1>
+            <button class="refresh-btn" onclick="loadResults()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Results Navigation -->
+        <div class="results-nav">
+            <button class="nav-btn" id="prevBtn" onclick="previousResult()">
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <span class="result-counter" id="resultCounter">Result 1 of 3</span>
+            <button class="nav-btn" id="nextBtn" onclick="nextResult()">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Images Display -->
+        <div class="images-container">
+            <!-- User Image -->
+            <div class="image-section">
+                <h3><i class="fas fa-user"></i> User Photo</h3>
+                <div class="image-card">
+                    <img id="userImage" src="results/user_1.jpg" alt="User Photo" 
+                         onerror="this.src='../blue_shirt.png'">
+                    <div class="image-info">
+                        <span class="image-label">Original</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloth Image -->
+            <div class="image-section">
+                <h3><i class="fas fa-tshirt"></i> Clothing Item</h3>
+                <div class="image-card">
+                    <img id="clothImage" src="results/cloth_1.jpg" alt="Clothing Item"
+                         onerror="this.src='../red_tshirt.png'">
+                    <div class="image-info">
+                        <span class="image-label">Item</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Combined Result -->
+            <div class="image-section result-section">
+                <h3><i class="fas fa-magic"></i> Virtual Try-On Result</h3>
+                <div class="image-card result-card">
+                    <img id="resultImage" src="results/combined_1.jpg" alt="Combined Result"
+                         onerror="this.src='../green_striped.png'">
+                    <div class="image-info">
+                        <span class="image-label">AI Generated</span>
+                        <div class="confidence-score" id="confidenceScore">
+                            <i class="fas fa-star"></i> 95% Match
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Details -->
+        <div class="details-panel">
+            <div class="detail-card">
+                <h4><i class="fas fa-info-circle"></i> Result Details</h4>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Processing Time:</span>
+                        <span class="detail-value" id="processingTime">2.3 seconds</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">AI Model:</span>
+                        <span class="detail-value">MediaPipe + Custom CV</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Resolution:</span>
+                        <span class="detail-value" id="resolution">640x480</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Generated:</span>
+                        <span class="detail-value" id="timestamp">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-panel">
+            <button class="action-btn save-btn" onclick="saveResult()">
+                <i class="fas fa-download"></i> Save Result
+            </button>
+            <button class="action-btn compare-btn" onclick="compareResults()">
+                <i class="fas fa-layer-group"></i> Compare
+            </button>
+            <button class="action-btn share-btn" onclick="shareResult()">
+                <i class="fas fa-share"></i> Share
+            </button>
+            <button class="action-btn regenerate-btn" onclick="regenerateResult()">
+                <i class="fas fa-redo"></i> Regenerate
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3>Loading Results...</h3>
+                <p id="loadingText">Scanning results folder...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="results-script.js"></script>
+</body>
+</html> 

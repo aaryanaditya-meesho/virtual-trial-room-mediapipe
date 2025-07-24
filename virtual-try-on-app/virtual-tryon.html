@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On Studio</title>
+    <link rel="stylesheet" href="tryon-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1>✂️ Virtual Try-On Studio</h1>
+            <button class="settings-btn">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel - Inputs -->
+        <div class="input-panel">
+            <div class="input-section">
+                <h3><i class="fas fa-user"></i> Your Photo</h3>
+                <div class="upload-area" id="userUploadArea">
+                    <input type="file" id="userImageInput" accept="image/*" hidden>
+                    <div class="upload-placeholder" onclick="document.getElementById('userImageInput').click()">
+                        <i class="fas fa-camera"></i>
+                        <p>Click to upload your photo</p>
+                        <small>JPG, PNG, WEBP supported</small>
+                    </div>
+                    <img id="userImagePreview" class="image-preview" style="display:none;">
+                </div>
+                <button class="capture-btn" onclick="captureFromWebcam('user')">
+                    <i class="fas fa-video"></i> Use Webcam
+                </button>
+            </div>
+
+            <div class="input-section">
+                <h3><i class="fas fa-tshirt"></i> Clothing Item</h3>
+                <div class="upload-area" id="clothingUploadArea">
+                    <input type="file" id="clothingImageInput" accept="image/*" hidden>
+                    <div class="upload-placeholder" onclick="document.getElementById('clothingImageInput').click()">
+                        <i class="fas fa-upload"></i>
+                        <p>Upload clothing image</p>
+                        <small>Clear background preferred</small>
+                    </div>
+                    <img id="clothingImagePreview" class="image-preview" style="display:none;">
+                </div>
+                <div class="preset-clothes">
+                    <h4>Or choose from presets:</h4>
+                    <div class="preset-grid">
+                        <img src="../blue_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Blue Shirt">
+                        <img src="../red_tshirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Red T-shirt">
+                        <img src="../green_striped.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Green Striped">
+                        <img src="../purple_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Purple Shirt">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <button class="try-on-btn" id="tryOnBtn" onclick="performVirtualTryOn()">
+                    <i class="fas fa-magic"></i> Try It On!
+                </button>
+                <div class="adjustment-controls" id="adjustmentControls" style="display:none;">
+                    <h4>Adjust Fit:</h4>
+                    <div class="slider-group">
+                        <label>Size: <span id="sizeValue">100%</span></label>
+                        <input type="range" id="sizeSlider" min="50" max="150" value="100" onchange="adjustClothing()">
+                    </div>
+                    <div class="slider-group">
+                        <label>Position Y: <span id="positionYValue">0px</span></label>
+                        <input type="range" id="positionYSlider" min="-50" max="50" value="0" onchange="adjustClothing()">
+                    </div>
+                    <div class="slider-group">
+                        <label>Position X: <span id="positionXValue">0px</span></label>
+                        <input type="range" id="positionXSlider" min="-30" max="30" value="0" onchange="adjustClothing()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Result -->
+        <div class="result-panel">
+            <h3><i class="fas fa-eye"></i> Virtual Try-On Result</h3>
+            <div class="result-container" id="resultContainer">
+                <div class="result-placeholder">
+                    <i class="fas fa-magic"></i>
+                    <h4>Your Virtual Try-On Result Will Appear Here</h4>
+                    <p>Upload your photo and a clothing item to see the magic!</p>
+                    <div class="features-list">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>AI-Powered Fitting</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time Adjustments</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Professional Quality</span>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="resultCanvas" style="display:none;"></canvas>
+            </div>
+            
+            <div class="result-actions" id="resultActions" style="display:none;">
+                <button class="action-btn download-btn" onclick="downloadResult()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+                <button class="action-btn share-btn" onclick="shareResult()">
+                    <i class="fas fa-share"></i> Share
+                </button>
+                <button class="action-btn save-btn" onclick="saveToGallery()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="action-btn reset-btn" onclick="resetTryOn()">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>✨ Creating Your Virtual Try-On...</h3>
+            <p id="loadingText">Processing images...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tryon-script.js"></script>
+</body>
+</html> 

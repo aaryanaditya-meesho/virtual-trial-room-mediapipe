@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+        button { padding: 15px 30px; font-size: 16px; margin: 10px; cursor: pointer; }
+        video { max-width: 100%; border: 1px solid #ccc; margin: 20px 0; }
+        .log { text-align: left; background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🎥 Camera Test</h1>
+    
+    <button onclick="testCamera()">Test My Camera</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <video id="testVideo" autoplay playsinline style="display:none;"></video>
+    
+    <div id="log" class="log">
+        <strong>Debug Log:</strong><br>
+        Click "Test My Camera" to start...<br>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<strong>Debug Log:</strong><br>';
+        }
+        
+        function testCamera() {
+            log('🎥 Starting camera test...');
+            
+            if (!navigator.mediaDevices) {
+                log('❌ navigator.mediaDevices not available');
+                return;
+            }
+            
+            if (!navigator.mediaDevices.getUserMedia) {
+                log('❌ getUserMedia not available');
+                return;
+            }
+            
+            log('✅ Camera API available, requesting access...');
+            
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    log('✅ Camera access granted!');
+                    log('📹 Stream active: ' + stream.active);
+                    log('🎬 Video tracks: ' + stream.getVideoTracks().length);
+                    
+                    const video = document.getElementById('testVideo');
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    log('📱 Video element created and stream assigned');
+                    
+                    video.addEventListener('loadedmetadata', function() {
+                        log('📺 Video metadata loaded - ' + video.videoWidth + 'x' + video.videoHeight);
+                    });
+                    
+                    video.addEventListener('canplay', function() {
+                        log('▶️ Video can play');
+                    });
+                })
+                .catch(function(error) {
+                    log('❌ Camera error: ' + error.name + ' - ' + error.message);
+                });
+        }
+    </script>
+</body>
+</html> 

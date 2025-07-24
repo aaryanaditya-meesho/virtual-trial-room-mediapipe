@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✂️ Virtual Tailor - Premium Catalog</title>
+    <link rel="stylesheet" href="catalog-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-title">
+                <h1>✂️ Virtual Tailor</h1>
+                <p>Premium Fabric Collection</p>
+            </div>
+            <button class="search-btn" onclick="toggleSearch()">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <!-- Enhanced Search Bar -->
+        <div class="search-container" id="searchContainer" style="display: none;">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search by fabric, color, pattern, or style..." onkeyup="searchItems()">
+                <button class="search-close" onclick="toggleSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <span class="suggestion-tag" onclick="searchItems('silk')">Silk</span>
+                <span class="suggestion-tag" onclick="searchItems('cotton')">Cotton</span>
+                <span class="suggestion-tag" onclick="searchItems('blue')">Blue</span>
+                <span class="suggestion-tag" onclick="searchItems('formal')">Formal</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Enhanced Categories Navigation -->
+        <div class="categories-nav">
+            <div class="categories-wrapper">
+                <button class="category-btn active" data-category="all" onclick="showCategory('all')">
+                    <div class="category-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <span>All Items</span>
+                    <div class="category-count">20+</div>
+                </button>
+                <button class="category-btn" data-category="shirts" onclick="showCategory('shirts')">
+                    <div class="category-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <span>Shirts</span>
+                    <div class="category-count">12</div>
+                </button>
+                <button class="category-btn" data-category="salwar" onclick="showCategory('salwar')">
+                    <div class="category-icon">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <span>Salwar Suits</span>
+                    <div class="category-count">8</div>
+                </button>
+                <button class="category-btn" data-category="kurtas" onclick="showCategory('kurtas')">
+                    <div class="category-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <span>Kurtas</span>
+                    <div class="category-count">6</div>
+                </button>
+                <button class="category-btn" data-category="sarees" onclick="showCategory('sarees')">
+                    <div class="category-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <span>Sarees</span>
+                    <div class="category-count">10</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Enhanced Featured Banner -->
+        <div class="featured-banner">
+            <div class="banner-background">
+                <div class="banner-pattern"></div>
+            </div>
+            <div class="banner-content">
+                <div class="banner-text">
+                    <h2>🎨 Artisan Fabric Collection</h2>
+                    <p>Experience the perfect fit with our AI-powered virtual fitting technology</p>
+                    <div class="banner-stats">
+                        <div class="stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Accuracy</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Happy Customers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">2.3s</span>
+                            <span class="stat-label">Avg Processing</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner-visual">
+                    <div class="fabric-showcase">
+                        <div class="fabric-swatch swatch-1"></div>
+                        <div class="fabric-swatch swatch-2"></div>
+                        <div class="fabric-swatch swatch-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shirts Collection -->
+        <div class="collection-section" id="shirts-collection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h3><i class="fas fa-tshirt"></i> Premium Shirts Collection</h3>
+                    <p>Handpicked fabrics for the modern wardrobe</p>
+                </div>
+                <div class="section-meta">
+                    <span class="item-count">12 designs</span>
+                    <div class="view-toggle">
+                        <button class="view-btn active"><i class="fas fa-th"></i></button>
+                        <button class="view-btn"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fabric-grid">
+                <!-- Premium Cotton Shirt -->
+                <div class="fabric-card premium" data-category="shirts" data-fabric="cotton-blue">
+                    <div class="fabric-image">
+                        <img src="blue_shirt.png" alt="Premium Cotton Blue Shirt">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('blue_shirt.png', 'Premium Cotton Blue Shirt')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                                <div class="fabric-tags">
+                                    <span class="tag premium-tag">Premium</span>
+                                    <span class="tag eco-tag">Eco-Friendly</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fabric-badge">
+                            <i class="fas fa-star"></i> Bestseller
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Premium Cotton Blue Shirt</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">100% Premium Cotton • Breathable</p>
+                        <div class="fabric-features">
+                            <span class="feature"><i class="fas fa-check"></i> Wrinkle-free</span>
+                            <span class="feature"><i class="fas fa-check"></i> Easy care</span>
+                        </div>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹1,299</span>
+                                <span class="original-price">₹1,699</span>
+                                <span class="discount">24% off</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.8)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comfort Cotton T-Shirt -->
+                <div class="fabric-card" data-category="shirts" data-fabric="cotton-red">
+                    <div class="fabric-image">
+                        <img src="red_tshirt.png" alt="Comfort Cotton Red T-Shirt">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('red_tshirt.png', 'Comfort Cotton Red T-Shirt')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                                <div class="fabric-tags">
+                                    <span class="tag comfort-tag">Comfort Fit</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Comfort Cotton Red T-Shirt</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Soft Cotton Blend • Casual Wear</p>
+                        <div class="fabric-features">
+                            <span class="feature"><i class="fas fa-check"></i> Breathable</span>
+                            <span class="feature"><i class="fas fa-check"></i> Durable</span>
+                        </div>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹899</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.6)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Designer Striped Shirt -->
+                <div class="fabric-card new-arrival" data-category="shirts" data-fabric="striped-green">
+                    <div class="fabric-image">
+                        <img src="green_striped.png" alt="Designer Green Striped Shirt">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('green_striped.png', 'Designer Green Striped Shirt')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                                <div class="fabric-tags">
+                                    <span class="tag new-tag">New Arrival</span>
+                                    <span class="tag trendy-tag">Trendy</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fabric-badge new-badge">
+                            <i class="fas fa-sparkles"></i> New
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Designer Green Striped Shirt</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Cotton Blend • Designer Pattern</p>
+                        <div class="fabric-features">
+                            <span class="feature"><i class="fas fa-check"></i> Unique design</span>
+                            <span class="feature"><i class="fas fa-check"></i> Versatile</span>
+                        </div>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹1,199</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-count">(4.7)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Luxury Purple Formal -->
+                <div class="fabric-card luxury" data-category="shirts" data-fabric="purple-formal">
+                    <div class="fabric-image">
+                        <img src="purple_shirt.png" alt="Luxury Purple Formal Shirt">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('purple_shirt.png', 'Luxury Purple Formal Shirt')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                                <div class="fabric-tags">
+                                    <span class="tag luxury-tag">Luxury</span>
+                                    <span class="tag formal-tag">Formal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fabric-badge luxury-badge">
+                            <i class="fas fa-crown"></i> Luxury
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Luxury Purple Formal Shirt</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Premium Cotton • Executive Collection</p>
+                        <div class="fabric-features">
+                            <span class="feature"><i class="fas fa-check"></i> Non-iron</span>
+                            <span class="feature"><i class="fas fa-check"></i> Stain resistant</span>
+                        </div>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹1,599</span>
+                                <span class="original-price">₹1,999</span>
+                                <span class="discount">20% off</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.9)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salwar Suits Collection -->
+        <div class="collection-section" id="salwar-collection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h3><i class="fas fa-female"></i> Elegant Salwar Suits Collection</h3>
+                    <p>Traditional elegance meets modern comfort</p>
+                </div>
+                <div class="section-meta">
+                    <span class="item-count">8 designs</span>
+                </div>
+            </div>
+            
+            <div class="fabric-grid">
+                <div class="fabric-card premium" data-category="salwar" data-fabric="silk-pink">
+                    <div class="fabric-image">
+                        <img src="https://via.placeholder.com/300x400/FF69B4/FFFFFF?text=Pink+Silk+Salwar" alt="Pink Silk Salwar">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('https://via.placeholder.com/300x400/FF69B4/FFFFFF?text=Pink+Silk+Salwar', 'Royal Pink Silk Salwar Suit')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                            </div>
+                        </div>
+                        <div class="fabric-badge">
+                            <i class="fas fa-gem"></i> Premium
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Royal Pink Silk Salwar Suit</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Pure Silk • Traditional Craft</p>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹3,299</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.8)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more salwar suit cards... -->
+            </div>
+        </div>
+
+        <!-- Kurtas Collection -->
+        <div class="collection-section" id="kurtas-collection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h3><i class="fas fa-user-tie"></i> Premium Kurtas Collection</h3>
+                    <p>Premium Kurtas for the discerning customer</p>
+                </div>
+                <div class="section-meta">
+                    <span class="item-count">6 designs</span>
+                </div>
+            </div>
+            
+            <div class="fabric-grid">
+                <div class="fabric-card" data-category="kurtas" data-fabric="white-cotton">
+                    <div class="fabric-image">
+                        <img src="https://via.placeholder.com/300x400/F5F5F5/333333?text=White+Cotton+Kurta" alt="White Cotton Kurta">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('https://via.placeholder.com/300x400/F5F5F5/333333?text=White+Cotton+Kurta', 'White Cotton Kurta')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>White Cotton Kurta</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Pure Cotton • Premium Quality</p>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹1,499</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.7)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fabric-card" data-category="kurtas" data-fabric="navy-linen">
+                    <div class="fabric-image">
+                        <img src="https://via.placeholder.com/300x400/000080/FFFFFF?text=Navy+Linen+Kurta" alt="Navy Linen Kurta">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('https://via.placeholder.com/300x400/000080/FFFFFF?text=Navy+Linen+Kurta', 'Navy Linen Kurta')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Navy Linen Kurta</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Premium Linen • Luxurious</p>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹1,799</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.8)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sarees Collection -->
+        <div class="collection-section" id="sarees-collection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h3><i class="fas fa-wind"></i> Premium Sarees Collection</h3>
+                    <p>Banarasi Silk Sarees for the royal look</p>
+                </div>
+                <div class="section-meta">
+                    <span class="item-count">10 designs</span>
+                </div>
+            </div>
+            
+            <div class="fabric-grid">
+                <div class="fabric-card premium" data-category="sarees" data-fabric="silk-gold">
+                    <div class="fabric-image">
+                        <img src="https://via.placeholder.com/300x400/FFD700/333333?text=Gold+Silk+Saree" alt="Gold Silk Saree">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('https://via.placeholder.com/300x400/FFD700/333333?text=Gold+Silk+Saree', 'Gold Silk Saree')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                            </div>
+                        </div>
+                        <div class="fabric-badge">
+                            <i class="fas fa-gem"></i> Premium
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Gold Silk Saree</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Banarasi Silk • Royal Craft</p>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹8,999</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-count">(4.9)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fabric-card" data-category="sarees" data-fabric="cotton-print">
+                    <div class="fabric-image">
+                        <img src="https://via.placeholder.com/300x400/FF6347/FFFFFF?text=Printed+Cotton+Saree" alt="Printed Cotton Saree">
+                        <div class="fabric-overlay">
+                            <div class="overlay-content">
+                                <button class="try-on-btn" onclick="tryOnFabric('https://via.placeholder.com/300x400/FF6347/FFFFFF?text=Printed+Cotton+Saree', 'Printed Cotton Saree')">
+                                    <i class="fas fa-magic"></i> Try On Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fabric-info">
+                        <div class="fabric-header">
+                            <h4>Printed Cotton Saree</h4>
+                            <div class="favorite-btn">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="fabric-type">Cotton • Traditional Print</p>
+                        <div class="fabric-details">
+                            <div class="price-section">
+                                <span class="current-price">₹2,299</span>
+                            </div>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-count">(4.5)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Try-On Modal -->
+    <div class="tryon-modal" id="tryonModal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-magic"></i> 
+                    <h3>Virtual Try-On Experience</h3>
+                </div>
+                <button class="close-modal" onclick="closeTryOnModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="selected-item">
+                    <div class="item-image">
+                        <img id="selectedItemImage" src="" alt="Selected Item">
+                    </div>
+                    <div class="item-details">
+                        <h4 id="selectedItemName"></h4>
+                        <p>Get the perfect fit with AI technology</p>
+                        <div class="ai-features">
+                            <span class="ai-feature"><i class="fas fa-robot"></i> AI Powered</span>
+                            <span class="ai-feature"><i class="fas fa-clock"></i> Instant Results</span>
+                            <span class="ai-feature"><i class="fas fa-mobile-alt"></i> Mobile Friendly</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="action-btn camera-btn" onclick="startTryOnWithCamera()">
+                        <i class="fas fa-camera"></i>
+                        <span>Use Camera</span>
+                        <small>Real-time fitting</small>
+                    </button>
+                    <button class="action-btn upload-btn" onclick="startTryOnWithUpload()">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Photo</span>
+                        <small>Choose from gallery</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="catalog-script.js"></script>
+</body>
+</html> 

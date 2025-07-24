@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meesho - Virtual Try-On</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Mobile Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span class="time">22:05</span>
+        </div>
+        <div class="status-center">
+            <div class="signal-bars">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <span class="carrier">📶</span>
+            <div class="wifi-icon">📶</div>
+            <div class="status-dot">•</div>
+        </div>
+        <div class="status-right">
+            <span class="network">4G</span>
+            <div class="battery-indicator">
+                <span class="battery-percentage">🔋16</span>
+            </div>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="user-info">
+            <div class="profile-pic">
+                <img src="https://via.placeholder.com/40x40/4A90E2/FFFFFF?text=AS" alt="Profile">
+            </div>
+            <div class="user-details">
+                <h3>Aaryan Singh</h3>
+            </div>
+        </div>
+        <div class="header-icons">
+            <i class="far fa-heart"></i>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge">16</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search by Keyword or Product ID">
+            <i class="fas fa-microphone"></i>
+            <i class="fas fa-camera"></i>
+        </div>
+    </div>
+
+    <!-- Location -->
+    <div class="location-bar">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Delivering to Bangalore South - 560035</span>
+        <i class="fas fa-chevron-right"></i>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="categories-section">
+        <div class="category-row">
+            <div class="category-item">
+                <div class="category-icon all-categories">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <span>All Categories</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon home">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span>Home</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon kurtis">
+                    <i class="fas fa-female"></i>
+                </div>
+                <span>Kurtis & Dresses</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon western">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <span>Western Wear</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon kids">
+                    <i class="fas fa-child"></i>
+                </div>
+                <span>Kids</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon more">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <span>More</span>
+            </div>
+        </div>
+
+        <div class="category-row">
+            <div class="category-item">
+                <div class="category-icon rakhi">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <span>Rakhi</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon sarees">
+                    <i class="fas fa-female"></i>
+                </div>
+                <span>Sarees</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon beauty">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <span>Beauty</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon kitchen">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <span>Kitchen</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon men">
+                    <i class="fas fa-male"></i>
+                </div>
+                <span>Men Fashion</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon jewelry">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <span>Jewelry</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotional Banner -->
+    <div class="promo-banner">
+        <div class="banner-content">
+            <div class="banner-image">
+                <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=200&h=300&fit=crop&crop=face" alt="Traditional Saree Collection">
+            </div>
+            <div class="banner-text">
+                <h2>Haryali Sawan Collections</h2>
+                <p class="festival-text">Festive Special Sarees</p>
+                <div class="price">From ₹199</div>
+                <button class="shop-btn">Shop Now ➤</button>
+                <div class="discount-badge">
+                    <div class="bhim-logo">BHIM</div>
+                    <div class="discount-text">
+                        <span class="upto">UPTO</span>
+                        <span class="amount">Instant Discount<br>₹25</span>
+                        <small>On 3 orders via BHIM App<br>On Orders above ₹250*</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recently Viewed -->
+    <div class="recently-viewed">
+        <h3>Recently Viewed</h3>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1594736797933-d0ca71eef19d?w=150&h=150&fit=crop" alt="Watch">
+                <div class="product-info">
+                    <p>Stylish Watch</p>
+                    <div class="price">₹899</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&fit=crop" alt="Hair Oil">
+                <div class="product-info">
+                    <p>Adivasi Hair Oil</p>
+                    <div class="price">₹299</div>
+                    <div class="pack-badge">PACK-2</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=150&h=150&fit=crop" alt="Toy">
+                <div class="product-info">
+                    <p>Kids Toy</p>
+                    <div class="price">₹449</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </div>
+                    <div class="nav-item tailor-nav" onclick="openCatalog()">
+                <i class="fas fa-cut"></i>
+                <span>Tailor</span>
+            </div>
+        <div class="nav-item">
+            <i class="fas fa-play"></i>
+            <span>Video Finds</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>My Orders</span>
+        </div>
+    </nav>
+
+    <!-- Virtual Try-On Modal -->
+    <div class="modal" id="tryOnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✂️ Virtual Tailor</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="try-on-options">
+                    <div class="option-card" onclick="startBasicTryOn()">
+                        <i class="fas fa-camera"></i>
+                        <h4>Virtual Try-On Studio</h4>
+                        <p>Upload & combine images</p>
+                    </div>
+                    <div class="option-card" onclick="startAdvancedTryOn()">
+                        <i class="fas fa-magic"></i>
+                        <h4>Live Try-On</h4>
+                        <p>Real-time webcam fitting</p>
+                    </div>
+                    <div class="option-card" onclick="viewMeasurements()">
+                        <i class="fas fa-ruler-combined"></i>
+                        <h4>Body Measurements</h4>
+                        <p>Get accurate sizing</p>
+                    </div>
+                </div>
+                <div class="demo-info">
+                    <h4>🎉 New Virtual Try-On Studio</h4>
+                    <p>Upload your photo and clothing items to see how they look together. Perfect for online shopping and outfit planning!</p>
+                    <button class="demo-btn" onclick="window.open('virtual-tryon.html', '_blank')">
+                        Open Virtual Studio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
