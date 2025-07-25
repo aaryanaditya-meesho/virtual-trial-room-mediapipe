@@ -45,6 +45,34 @@ function showCategory(category) {
         fabricCards.forEach(card => {
             card.style.display = 'block';
         });
+        
+        // Hide custom upload section for 'all' category
+        const customSection = document.getElementById('custom-collection');
+        if (customSection) {
+            customSection.style.display = 'none';
+            customSection.classList.add('hidden');
+        }
+    } else if (category === 'custom') {
+        // Hide all regular collection sections
+        collectionSections.forEach(section => {
+            section.classList.add('hidden');
+        });
+        
+        // Hide all fabric cards
+        fabricCards.forEach(card => {
+            card.style.display = 'none';
+        });
+        
+        // Show the custom upload section
+        const customSection = document.getElementById('custom-collection');
+        
+        if (customSection) {
+            customSection.style.display = 'block';
+            customSection.classList.remove('hidden');
+            console.log('✅ Custom section shown');
+        } else {
+            console.error('❌ Custom section not found!');
+        }
     } else {
         // Show only selected category
         collectionSections.forEach(section => {
@@ -54,6 +82,13 @@ function showCategory(category) {
                 section.classList.add('hidden');
             }
         });
+        
+        // Hide custom upload section
+        const customSection = document.getElementById('custom-collection');
+        if (customSection) {
+            customSection.style.display = 'none';
+            customSection.classList.add('hidden');
+        }
         
         fabricCards.forEach(card => {
             if (card.getAttribute('data-category') === category) {
@@ -211,6 +246,17 @@ function tryOnFabric(imageSrc, fabricName) {
     showNotification(`✨ ${fabricName} selected for try-on`, 'success');
 }
 
+function showTryOnModal() {
+    console.log('🎭 Showing try-on modal for custom item');
+    
+    // Show try-on modal
+    document.getElementById('tryonModal').style.display = 'flex';
+    
+    // Add animation
+    const modalContent = document.querySelector('.modal-content');
+    modalContent.style.animation = 'modalSlideIn 0.3s ease-out';
+}
+
 function closeTryOnModal() {
     const modal = document.getElementById('tryonModal');
     const modalContent = document.querySelector('.modal-content');
@@ -228,19 +274,31 @@ function closeTryOnModal() {
 }
 
 function startTryOnWithCamera() {
-    if (!selectedFabric) {
+    // Check if it's a custom item or regular fabric
+    if (window.currentCustomItem) {
+        console.log(`📸 Starting camera try-on with custom item: ${window.currentCustomItem.name}`);
+        
+        // Store custom item data for the virtual try-on page
+        localStorage.setItem('selectedFabric', window.currentCustomItem.image);
+        localStorage.setItem('selectedFabricName', window.currentCustomItem.name);
+        localStorage.setItem('tryOnMode', 'camera');
+        localStorage.setItem('isCustomItem', 'true');
+        
+        showNotification('📸 Opening camera try-on with your custom item...', 'info');
+    } else if (selectedFabric) {
+        console.log(`📸 Starting camera try-on with: ${selectedFabricName}`);
+        
+        // Store selected fabric in localStorage for the virtual try-on page
+        localStorage.setItem('selectedFabric', selectedFabric);
+        localStorage.setItem('selectedFabricName', selectedFabricName);
+        localStorage.setItem('tryOnMode', 'camera');
+        localStorage.removeItem('isCustomItem');
+        
+        showNotification('📸 Opening camera try-on...', 'info');
+    } else {
         showNotification('❌ No fabric selected', 'error');
         return;
     }
-    
-    console.log(`📸 Starting camera try-on with: ${selectedFabricName}`);
-    
-    // Store selected fabric in localStorage for the virtual try-on page
-    localStorage.setItem('selectedFabric', selectedFabric);
-    localStorage.setItem('selectedFabricName', selectedFabricName);
-    localStorage.setItem('tryOnMode', 'camera');
-    
-    showNotification('📸 Opening camera try-on...', 'info');
     
     // Close modal and redirect
     closeTryOnModal();
@@ -251,19 +309,31 @@ function startTryOnWithCamera() {
 }
 
 function startTryOnWithUpload() {
-    if (!selectedFabric) {
+    // Check if it's a custom item or regular fabric
+    if (window.currentCustomItem) {
+        console.log(`📁 Starting upload try-on with custom item: ${window.currentCustomItem.name}`);
+        
+        // Store custom item data for the virtual try-on page
+        localStorage.setItem('selectedFabric', window.currentCustomItem.image);
+        localStorage.setItem('selectedFabricName', window.currentCustomItem.name);
+        localStorage.setItem('tryOnMode', 'upload');
+        localStorage.setItem('isCustomItem', 'true');
+        
+        showNotification('📁 Opening upload try-on with your custom item...', 'info');
+    } else if (selectedFabric) {
+        console.log(`📁 Starting upload try-on with: ${selectedFabricName}`);
+        
+        // Store selected fabric in localStorage for the virtual try-on page
+        localStorage.setItem('selectedFabric', selectedFabric);
+        localStorage.setItem('selectedFabricName', selectedFabricName);
+        localStorage.setItem('tryOnMode', 'upload');
+        localStorage.removeItem('isCustomItem');
+        
+        showNotification('📁 Opening upload try-on...', 'info');
+    } else {
         showNotification('❌ No fabric selected', 'error');
         return;
     }
-    
-    console.log(`📁 Starting upload try-on with: ${selectedFabricName}`);
-    
-    // Store selected fabric in localStorage for the virtual try-on page
-    localStorage.setItem('selectedFabric', selectedFabric);
-    localStorage.setItem('selectedFabricName', selectedFabricName);
-    localStorage.setItem('tryOnMode', 'upload');
-    
-    showNotification('📁 Opening upload try-on...', 'info');
     
     // Close modal and redirect
     closeTryOnModal();
@@ -478,6 +548,193 @@ function setupFavoriteButtons() {
     });
 }
 
+// Custom Upload Functions
+let uploadedItems = JSON.parse(localStorage.getItem('uploadedClothingItems') || '[]');
+
+function triggerFileUpload() {
+    document.getElementById('customClothingInput').click();
+}
+
+function handleCustomUpload(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            showNotification('❌ Please select a valid image file', 'error');
+            return;
+        }
+        
+        // Validate file size (10MB limit)
+        if (file.size > 10 * 1024 * 1024) {
+            showNotification('❌ File size must be less than 10MB', 'error');
+            return;
+        }
+        
+        showNotification('📤 Uploading your clothing...', 'info');
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            const uploadedItem = {
+                id: Date.now(),
+                name: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
+                displayName: `Custom ${file.name.replace(/\.[^/.]+$/, "")}`,
+                image: imageData,
+                uploadDate: new Date().toLocaleDateString(),
+                category: 'custom'
+            };
+            
+            // Add to uploaded items
+            uploadedItems.push(uploadedItem);
+            localStorage.setItem('uploadedClothingItems', JSON.stringify(uploadedItems));
+            
+            // Update the display
+            updateUploadedItemsDisplay();
+            
+            // Update category count
+            updateCustomCategoryCount();
+            
+            showNotification('✅ Clothing uploaded successfully!', 'success');
+            
+            // Clear the input
+            input.value = '';
+        };
+        
+        reader.readAsDataURL(file);
+    }
+}
+
+function updateUploadedItemsDisplay() {
+    const uploadedGrid = document.getElementById('uploadedGrid');
+    const uploadedItemsSection = document.getElementById('uploadedItemsGrid');
+    
+    if (uploadedItems.length === 0) {
+        uploadedItemsSection.style.display = 'none';
+        return;
+    }
+    
+    uploadedItemsSection.style.display = 'block';
+    uploadedGrid.innerHTML = '';
+    
+    uploadedItems.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'fabric-card uploaded-item';
+        itemCard.innerHTML = `
+            <div class="fabric-image">
+                <img src="${item.image}" alt="${item.displayName}">
+                <div class="fabric-overlay">
+                    <div class="overlay-content">
+                        <button class="try-on-btn" onclick="tryOnCustomItem('${item.id}')">
+                            <i class="fas fa-magic"></i> Try On Now
+                        </button>
+                        <button class="delete-btn" onclick="deleteUploadedItem('${item.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+                <div class="fabric-badge custom-badge">
+                    <i class="fas fa-user"></i> Custom
+                </div>
+            </div>
+            <div class="fabric-info">
+                <div class="fabric-header">
+                    <h4>${item.displayName}</h4>
+                    <div class="upload-date">
+                        <small><i class="fas fa-calendar"></i> ${item.uploadDate}</small>
+                    </div>
+                </div>
+                <p class="fabric-type">Your Upload • Custom Design</p>
+                <div class="fabric-features">
+                    <span class="feature"><i class="fas fa-check"></i> AI Ready</span>
+                    <span class="feature"><i class="fas fa-check"></i> High Quality</span>
+                </div>
+            </div>
+        `;
+        
+        uploadedGrid.appendChild(itemCard);
+    });
+}
+
+function updateCustomCategoryCount() {
+    const customBtn = document.querySelector('[data-category="custom"] .category-count');
+    if (customBtn) {
+        if (uploadedItems.length > 0) {
+            customBtn.innerHTML = uploadedItems.length;
+        } else {
+            customBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        }
+    }
+}
+
+function tryOnCustomItem(itemId) {
+    const item = uploadedItems.find(i => i.id == itemId);
+    if (item) {
+        // Use the existing try-on flow but with custom item data
+        showTryOnModal();
+        document.getElementById('selectedItemImage').src = item.image;
+        document.getElementById('selectedItemName').textContent = item.displayName;
+        
+        // Store the custom item data for try-on (pass the base64 data URL directly)
+        window.currentCustomItem = {
+            name: item.displayName,
+            image: item.image,
+            isCustom: true
+        };
+    }
+}
+
+function deleteUploadedItem(itemId) {
+    if (confirm('Are you sure you want to delete this uploaded item?')) {
+        uploadedItems = uploadedItems.filter(item => item.id != itemId);
+        localStorage.setItem('uploadedClothingItems', JSON.stringify(uploadedItems));
+        updateUploadedItemsDisplay();
+        updateCustomCategoryCount();
+        showNotification('🗑️ Item deleted successfully', 'info');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    // Style the notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        background: ${type === 'error' ? '#ff4444' : type === 'success' ? '#44ff44' : '#4444ff'};
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        max-width: 350px;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+
+
 // Initialize on page load
 window.addEventListener('load', function() {
     console.log('🎉 Catalog page fully loaded');
@@ -485,11 +742,15 @@ window.addEventListener('load', function() {
     // Setup interactive elements
     setupFavoriteButtons();
     
+    // Initialize custom upload features
+    updateUploadedItemsDisplay();
+    updateCustomCategoryCount();
+    
     // Check if there's a selected category from URL params
     const urlParams = new URLSearchParams(window.location.search);
     const category = urlParams.get('category');
     
-    if (category && ['all', 'shirts', 'salwar', 'kurtas', 'sarees'].includes(category)) {
+    if (category && ['all', 'shirts', 'salwar', 'kurtas', 'sarees', 'custom'].includes(category)) {
         showCategory(category);
     }
     

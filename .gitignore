@@ -57,3 +57,5 @@ calibration.json
 
 # Keep test shirt images (needed for demo)
 # blue_shirt.png, red_tshirt.png, etc. will be included 
+.pre-commit-config.yaml
+trufflehog/

@@ -14,7 +14,7 @@
             <button class="back-btn" onclick="window.history.back()">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h1>✂️ Virtual Try-On Studio</h1>
+            <h1 id="studioTitle">✂️ Virtual Try-On Studio</h1>
             <button class="settings-btn">
                 <i class="fas fa-cog"></i>
             </button>
@@ -39,6 +39,10 @@
                 <button class="capture-btn" onclick="captureFromWebcam('user')">
                     <i class="fas fa-video"></i> Use Webcam
                 </button>
+                <button class="capture-btn" onclick="openLiveTryOn()" style="margin-top: 10px; position: relative;">
+                    <i class="fas fa-broadcast-tower"></i> Live Try-On (API)
+                    <span id="liveClothingBadge" style="display: none; position: absolute; top: -8px; right: -8px; background: #28a745; color: white; border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: bold;">AUTO</span>
+                </button>
             </div>
 
             <div class="input-section">
@@ -55,10 +59,10 @@
                 <div class="preset-clothes">
                     <h4>Or choose from presets:</h4>
                     <div class="preset-grid">
-                        <img src="../blue_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Blue Shirt">
-                        <img src="../red_tshirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Red T-shirt">
-                        <img src="../green_striped.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Green Striped">
-                        <img src="../purple_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Purple Shirt">
+                        <img src="blue_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Blue Shirt">
+                        <img src="red_tshirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Red T-shirt">
+                        <img src="green_striped.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Green Striped">
+                        <img src="purple_shirt.png" class="preset-item" onclick="loadPresetClothing(this.src)" alt="Purple Shirt">
                     </div>
                 </div>
             </div>

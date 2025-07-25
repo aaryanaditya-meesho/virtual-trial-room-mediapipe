@@ -649,3 +649,56 @@ body {
         padding: 15px;
     }
 } 
+
+/* API Integration Styles */
+.api-result-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+}
+
+.api-result-container {
+    margin: 15px 0;
+}
+
+.api-try-on-btn {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #667eea, 0 0 10px #667eea, 0 0 15px #667eea;
+    }
+    to {
+        box-shadow: 0 0 10px #764ba2, 0 0 20px #764ba2, 0 0 30px #764ba2;
+    }
+}
+
+/* Live Try-On Status Indicator */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28a745;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.error {
+    background: #dc3545;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+} 

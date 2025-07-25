@@ -29,6 +29,9 @@ function initializeApp() {
         console.log('📱 Mobile device detected');
         adaptForMobile();
     }
+    
+    // Check API health on startup
+    setTimeout(checkAPIHealth, 1000);
 }
 
 // Add event listeners
@@ -131,7 +134,7 @@ function startBasicTryOn() {
     
     closeModal();
     
-    // Open the new virtual try-on page
+    // Open the virtual try-on page
     window.open('virtual-tryon.html', '_blank');
     
     showNotification('✨ Virtual Try-On Studio opened!', 'success');
@@ -140,122 +143,209 @@ function startBasicTryOn() {
 }
 
 function startAdvancedTryOn() {
-    showNotification('✨ Starting Advanced Trial Room...', 'info');
+    showNotification('🚀 Starting Live Try-On with Real-Time Streaming...', 'info');
     
     closeModal();
     
     try {
-        // Launch advanced_trial_room.py directly
-        const scriptPath = window.location.href.replace('/virtual-try-on-app/index.html', '/advanced_trial_room.py');
-        window.open(scriptPath, '_blank');
+        // Open the integrated live try-on interface
+        window.open('live-tryon.html', '_blank', 'width=1400,height=900');
         
-        showNotification('🚀 Launching advanced trial room...', 'success');
+        showNotification('📹 Live streaming try-on launched!', 'success');
         
-        // Backup: Show terminal command
+        // Show helpful tips
         setTimeout(() => {
-            const terminalCommand = 'python3 advanced_trial_room.py';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(terminalCommand).then(() => {
-                    showNotification('📋 Command copied! Paste in Terminal if app didn\'t open', 'info');
-                }).catch(() => {
-                    showNotification('💻 Run in Terminal: python3 advanced_trial_room.py', 'info');
-                });
-            }
+            showNotification('💡 Allow camera access for live measurements', 'info');
         }, 2000);
         
     } catch (error) {
-        showNotification('💻 Please run: python3 advanced_trial_room.py', 'warning');
+        console.error('Failed to open live try-on interface:', error);
+        showNotification('❌ Failed to open live try-on interface', 'error');
     }
     
-    trackEvent('advanced_trial_room_launched');
+    trackEvent('live_tryon_launched');
 }
 
 function viewMeasurements() {
-    showNotification('📐 Executing Body Measurement Tool...', 'info');
+    showNotification('📐 Opening Body Measurement Tool...', 'info');
     
     closeModal();
     
-    // Try multiple methods to actually RUN the Python script
-    executeShoulderDistance();
-    
-    trackEvent('shoulder_distance_executed');
-}
-
-function executeShoulderDistance() {
-    // Method 1: Try to execute shell script (Mac/Linux)
+    // Open the streaming API for body measurements
     try {
-        const shellScript = window.location.href.replace('/virtual-try-on-app/index.html', '/run_shoulder_distance.sh');
-        window.open(shellScript, '_blank');
-        showNotification('🚀 Executing shoulder measurement script...', 'success');
+        const measurementUrl = 'http://localhost:8000';
+        const measurementWindow = window.open(measurementUrl, '_blank', 'width=1000,height=700');
+        
+        showNotification('📏 Real-time body measurement tool opened!', 'success');
+        
+        // Show measurement tips
+        setTimeout(() => {
+            showNotification('📸 Stand 2-3 feet from camera for accurate measurements', 'info');
+        }, 2000);
+        
+        setTimeout(() => {
+            showNotification('🎯 Use the calibration controls for better accuracy', 'info');
+        }, 4000);
+        
     } catch (error) {
-        console.log('Shell script method failed, trying alternatives...');
+        console.error('Failed to open measurement tool:', error);
+        showNotification('❌ Make sure streaming API is running on port 8000', 'error');
     }
     
-    // Method 2: Try Windows batch file
-    setTimeout(() => {
-        try {
-            const batScript = window.location.href.replace('/virtual-try-on-app/index.html', '/run_shoulder_distance.bat');
-            window.open(batScript, '_blank');
-        } catch (error) {
-            console.log('Batch file method failed');
-        }
-    }, 500);
-    
-    // Method 3: Try Python protocol (if registered)
-    setTimeout(() => {
-        try {
-            window.location.href = 'python://shoulder_distance.py';
-        } catch (error) {
-            console.log('Python protocol not available');
-        }
-    }, 1000);
-    
-    // Method 4: Auto-copy command and show instructions
-    setTimeout(() => {
-        const command = 'python3 shoulder_distance.py';
+    trackEvent('body_measurement_opened');
+}
+
+// Add new function for API health check
+async function checkAPIHealth() {
+    try {
+        const response = await fetch('http://localhost:8000/health');
+        const data = await response.json();
         
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(command).then(() => {
-                showNotification('📋 Command copied to clipboard! Paste in Terminal to run', 'success');
-                
-                // Show detailed execution instructions
-                setTimeout(() => {
-                    showExecutionInstructions();
-                }, 1000);
-                
-            }).catch(() => {
-                showExecutionInstructions();
-            });
-        } else {
-            showExecutionInstructions();
+        if (data.status === 'healthy') {
+            showNotification('✅ Streaming API is ready!', 'success');
+            return true;
         }
-    }, 1500);
+    } catch (error) {
+        console.error('API health check failed:', error);
+        showNotification('⚠️ Streaming API not available. Please start it first.', 'warning');
+        
+        // Show instructions to start API
+        setTimeout(() => {
+            showNotification('💻 Run: python streaming_api.py', 'info');
+        }, 2000);
+        
+        return false;
+    }
 }
 
-function showExecutionInstructions() {
-    const instructions = `
-    🚀 TO RUN SHOULDER MEASUREMENT TOOL:
-    
-    Option 1 (Recommended):
-    • Open Terminal/Command Prompt
-    • Navigate to your project folder
-    • Run: python3 shoulder_distance.py
-    
-    Option 2:
-    • Double-click run_shoulder_distance.sh (Mac/Linux)
-    • Or double-click run_shoulder_distance.bat (Windows)
-    
-    Option 3:
-    • Open Finder/File Explorer
-    • Right-click shoulder_distance.py
-    • Choose "Open with Python"
-    `;
-    
-    alert(instructions);
-    showNotification('💡 Check the popup for execution instructions!', 'info');
+// Add new function for virtual try-on with clothing upload
+async function performVirtualTryOn(clothingFile) {
+    try {
+        showNotification('🎭 Processing virtual try-on...', 'info');
+        
+        const formData = new FormData();
+        formData.append('clothing_image', clothingFile);
+        
+        const response = await fetch('http://localhost:8000/virtual-tryon', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                showNotification('✨ Virtual try-on complete!', 'success');
+                
+                // Display the result
+                displayTryOnResult(result.result_image_base64);
+                
+                return result;
+            } else {
+                throw new Error(result.error || 'Try-on failed');
+            }
+        } else {
+            throw new Error(`API Error: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Virtual try-on failed:', error);
+        showNotification('❌ Virtual try-on failed: ' + error.message, 'error');
+        return null;
+    }
 }
 
+// Add function to display try-on results
+function displayTryOnResult(imageBase64) {
+    // Create or update result display
+    let resultModal = document.getElementById('tryOnResultModal');
+    
+    if (!resultModal) {
+        resultModal = document.createElement('div');
+        resultModal.id = 'tryOnResultModal';
+        resultModal.className = 'modal';
+        resultModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🎭 Virtual Try-On Result</h3>
+                    <span class="close" onclick="closeTryOnResult()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="result-image-container">
+                        <img id="tryOnResultImage" style="max-width: 100%; height: auto; border-radius: 10px;">
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn-primary" onclick="saveTryOnResult()">
+                            <i class="fas fa-download"></i> Save Result
+                        </button>
+                        <button class="btn-secondary" onclick="shareTryOnResult()">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <button class="btn-tertiary" onclick="tryAnotherOutfit()">
+                            <i class="fas fa-redo"></i> Try Another
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(resultModal);
+    }
+    
+    const resultImage = document.getElementById('tryOnResultImage');
+    resultImage.src = imageBase64;
+    
+    resultModal.style.display = 'block';
+}
 
+// Add helper functions for result modal
+function closeTryOnResult() {
+    const resultModal = document.getElementById('tryOnResultModal');
+    if (resultModal) {
+        resultModal.style.display = 'none';
+    }
+}
+
+function saveTryOnResult() {
+    const resultImage = document.getElementById('tryOnResultImage');
+    if (resultImage && resultImage.src) {
+        const link = document.createElement('a');
+        link.download = `virtual-tryon-result-${Date.now()}.jpg`;
+        link.href = resultImage.src;
+        link.click();
+        
+        showNotification('💾 Result saved!', 'success');
+    }
+}
+
+function shareTryOnResult() {
+    if (navigator.share) {
+        const resultImage = document.getElementById('tryOnResultImage');
+        if (resultImage && resultImage.src) {
+            // Convert base64 to blob for sharing
+            fetch(resultImage.src)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], 'virtual-tryon-result.jpg', { type: 'image/jpeg' });
+                    navigator.share({
+                        title: 'My Virtual Try-On Result',
+                        text: 'Check out how this outfit looks on me!',
+                        files: [file]
+                    });
+                });
+        }
+    } else {
+        // Fallback: Copy image URL
+        const resultImage = document.getElementById('tryOnResultImage');
+        if (resultImage && navigator.clipboard) {
+            navigator.clipboard.writeText(resultImage.src);
+            showNotification('📋 Result URL copied to clipboard!', 'info');
+        }
+    }
+}
+
+function tryAnotherOutfit() {
+    closeTryOnResult();
+    showNotification('🎯 Ready for another try-on!', 'info');
+}
 
 // Search functionality
 function handleSearchFocus() {

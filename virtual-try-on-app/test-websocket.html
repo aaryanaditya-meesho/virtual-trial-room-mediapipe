@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <h1>🔗 WebSocket Connection Test</h1>
+    
+    <div>
+        <h3>Connection Status:</h3>
+        <div id="status">Connecting...</div>
+    </div>
+    
+    <div>
+        <video id="testVideo" width="320" height="240" autoplay muted style="border: 1px solid #ccc;"></video>
+        <canvas id="testCanvas" width="320" height="240" style="border: 1px solid #ccc; margin-left: 10px;"></canvas>
+    </div>
+    
+    <div style="margin: 20px 0;">
+        <button id="startBtn" onclick="startTest()">Start Camera Test</button>
+        <button id="stopBtn" onclick="stopTest()" disabled>Stop Test</button>
+    </div>
+    
+    <div>
+        <h3>📏 Live Measurements:</h3>
+        <div id="measurements">No measurements yet...</div>
+    </div>
+    
+    <div>
+        <h3>🔍 Debug Log:</h3>
+        <div id="debugLog" style="background: #f0f0f0; padding: 10px; height: 200px; overflow-y: scroll; font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let socket = null;
+        let mediaStream = null;
+        let isStreaming = false;
+
+        function log(message) {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.innerHTML += `[${timestamp}] ${message}<br>`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(text, color = 'black') {
+            document.getElementById('status').innerHTML = `<span style="color: ${color};">${text}</span>`;
+        }
+
+        function connectWebSocket() {
+            log('🔗 Connecting to WebSocket...');
+            socket = io(API_BASE);
+            
+            socket.on('connect', () => {
+                updateStatus('✅ Connected', 'green');
+                log('✅ WebSocket connected successfully');
+            });
+            
+            socket.on('disconnect', () => {
+                updateStatus('❌ Disconnected', 'red');
+                log('❌ WebSocket disconnected');
+            });
+            
+            socket.on('processed_frame', (data) => {
+                log('📦 Received processed frame and measurements');
+                updateMeasurements(data.measurements);
+                displayProcessedFrame(data.frame);
+            });
+            
+            socket.on('status', (data) => {
+                log('📢 Status: ' + data.message);
+            });
+            
+            socket.on('error', (data) => {
+                log('❌ Error: ' + data.message);
+            });
+        }
+
+        async function startTest() {
+            try {
+                log('📹 Requesting camera access...');
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 320, height: 240 }
+                });
+                
+                const video = document.getElementById('testVideo');
+                video.srcObject = mediaStream;
+                
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                
+                log('✅ Camera started, beginning frame capture...');
+                startFrameCapture();
+                
+            } catch (error) {
+                log('❌ Camera error: ' + error.message);
+                updateStatus('❌ Camera Error', 'red');
+            }
+        }
+
+        function startFrameCapture() {
+            if (!socket || !mediaStream) {
+                log('⚠️ Socket or media stream not available');
+                return;
+            }
+            
+            const video = document.getElementById('testVideo');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let frameCount = 0;
+            
+            function captureFrame() {
+                if (!mediaStream || !video.videoWidth) {
+                    setTimeout(captureFrame, 100);
+                    return;
+                }
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                const base64Data = imageData.split(',')[1];
+                
+                socket.emit('process_frame', { frame: base64Data });
+                frameCount++;
+                
+                if (frameCount % 10 === 0) {
+                    log(`📤 Sent ${frameCount} frames`);
+                }
+                
+                if (isStreaming) {
+                    setTimeout(captureFrame, 200); // 5 FPS for testing
+                }
+            }
+            
+            isStreaming = true;
+            captureFrame();
+        }
+
+        function stopTest() {
+            isStreaming = false;
+            
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+            }
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            
+            log('⏹️ Test stopped');
+        }
+
+        function updateMeasurements(measurements) {
+            if (!measurements) {
+                log('⚠️ No measurements in response');
+                return;
+            }
+            
+            log('📏 Measurements received: ' + JSON.stringify(measurements, null, 2));
+            
+            const measurementsDiv = document.getElementById('measurements');
+            measurementsDiv.innerHTML = `
+                <strong>Shoulders:</strong> ${measurements.shoulder_cm ? measurements.shoulder_cm.toFixed(1) + ' cm' : 'N/A'}<br>
+                <strong>Waist:</strong> ${measurements.waist_cm ? measurements.waist_cm.toFixed(1) + ' cm' : 'N/A'}<br>
+                <strong>Confidence:</strong> ${measurements.confidence ? (measurements.confidence * 100).toFixed(0) + '%' : 'N/A'}<br>
+                <strong>Resolution:</strong> ${measurements.resolution ? measurements.resolution.width + 'x' + measurements.resolution.height : 'N/A'}
+            `;
+        }
+
+        function displayProcessedFrame(frameBase64) {
+            if (frameBase64) {
+                const canvas = document.getElementById('testCanvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                
+                img.src = 'data:image/jpeg;base64,' + frameBase64;
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Test page loaded');
+            connectWebSocket();
+        });
+    </script>
+</body>
+</html> 
