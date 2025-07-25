@@ -397,6 +397,129 @@ function showResultActions() {
     adjustmentControls.style.display = 'block';
 }
 
+// Show place order button for camera mode
+function showPlaceOrderButton() {
+    const resultActions = document.getElementById('resultActions');
+    
+    // Check if place order button already exists
+    if (!resultActions.querySelector('.place-order-btn-camera')) {
+        const placeOrderBtn = document.createElement('button');
+        placeOrderBtn.className = 'action-btn place-order-btn-camera';
+        placeOrderBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Place Order';
+        placeOrderBtn.onclick = placeOrder;
+        placeOrderBtn.style.cssText = `
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            grid-column: span 2;
+        `;
+        
+        // Add hover effect
+        placeOrderBtn.onmouseover = () => {
+            placeOrderBtn.style.transform = 'translateY(-2px)';
+            placeOrderBtn.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.3)';
+        };
+        placeOrderBtn.onmouseout = () => {
+            placeOrderBtn.style.transform = 'translateY(0)';
+            placeOrderBtn.style.boxShadow = 'none';
+        };
+        
+        resultActions.appendChild(placeOrderBtn);
+    }
+}
+
+// Place order function
+function placeOrder() {
+    const orderBtn = document.querySelector('.place-order-btn, .place-order-btn-camera');
+    
+    if (orderBtn) {
+        // Disable button and show loading state
+        orderBtn.disabled = true;
+        orderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        
+        // Simulate processing time
+        setTimeout(() => {
+            // Show order placed message
+            showOrderPlacedModal();
+            
+            // Reset button after modal is shown
+            setTimeout(() => {
+                orderBtn.disabled = false;
+                orderBtn.innerHTML = '<i class="fas fa-check"></i> Order Placed';
+                orderBtn.style.background = 'linear-gradient(135deg, #6c757d 0%, #495057 100%)';
+                orderBtn.onclick = () => showNotification('Order already placed!', 'info');
+            }, 500);
+            
+        }, 2000);
+    }
+}
+
+// Show order placed modal
+function showOrderPlacedModal() {
+    // Create order success modal
+    const modal = document.createElement('div');
+    modal.className = 'order-success-modal';
+    modal.innerHTML = `
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="order-success-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>🎉 Order Placed Successfully!</h2>
+                <p>Thank you for your order. Your virtual try-on result has been saved and your order is being processed.</p>
+                <div class="order-details">
+                    <div class="order-info">
+                        <span class="label">Order ID:</span>
+                        <span class="value">#VTO-${Date.now().toString().slice(-6)}</span>
+                    </div>
+                    <div class="order-info">
+                        <span class="label">Estimated Delivery:</span>
+                        <span class="value">5-7 business days</span>
+                    </div>
+                    <div class="order-info">
+                        <span class="label">Status:</span>
+                        <span class="value">Processing</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn primary" onclick="closeOrderModal()">
+                        <i class="fas fa-check"></i> Continue Shopping
+                    </button>
+                    <button class="btn secondary" onclick="downloadResult(); closeOrderModal();">
+                        <i class="fas fa-download"></i> Download Result
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add success notification
+    showNotification('🛒 Order placed successfully! Check your email for confirmation.', 'success');
+    
+    // Auto-close after 10 seconds
+    setTimeout(() => {
+        if (document.querySelector('.order-success-modal')) {
+            closeOrderModal();
+        }
+    }, 10000);
+}
+
+// Close order modal
+function closeOrderModal() {
+    const modal = document.querySelector('.order-success-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
 // Adjustment Controls
 function adjustClothing() {
     const sizeSlider = document.getElementById('sizeSlider');
@@ -1236,6 +1359,150 @@ style.textContent = `
          margin: 2px 0;
          font-size: 12px;
      }
+     
+     .order-success-modal {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0,0,0,0.8);
+         z-index: 3000;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         backdrop-filter: blur(5px);
+         animation: fadeIn 0.3s ease-out;
+     }
+     
+     .order-success-content {
+         background: white;
+         border-radius: 20px;
+         padding: 40px;
+         max-width: 500px;
+         width: 90%;
+         text-align: center;
+         box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+         animation: slideInUp 0.4s ease-out;
+     }
+     
+     .success-icon {
+         font-size: 64px;
+         color: #28a745;
+         margin-bottom: 20px;
+         animation: bounceIn 0.6s ease-out;
+     }
+     
+     .order-success-content h2 {
+         color: #28a745;
+         margin: 0 0 15px 0;
+         font-size: 24px;
+         font-weight: 700;
+     }
+     
+     .order-success-content p {
+         color: #666;
+         margin: 0 0 25px 0;
+         line-height: 1.6;
+     }
+     
+     .order-details {
+         background: #f8f9fa;
+         border-radius: 12px;
+         padding: 20px;
+         margin: 20px 0;
+         text-align: left;
+     }
+     
+     .order-info {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 8px 0;
+         border-bottom: 1px solid #e9ecef;
+     }
+     
+     .order-info:last-child {
+         border-bottom: none;
+     }
+     
+     .order-info .label {
+         font-weight: 600;
+         color: #495057;
+     }
+     
+     .order-info .value {
+         color: #28a745;
+         font-weight: 500;
+     }
+     
+     .modal-actions {
+         display: flex;
+         gap: 15px;
+         justify-content: center;
+         margin-top: 25px;
+     }
+     
+     .modal-actions .btn {
+         padding: 12px 24px;
+         border: none;
+         border-radius: 8px;
+         font-weight: 600;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         display: flex;
+         align-items: center;
+         gap: 8px;
+     }
+     
+     .modal-actions .btn.primary {
+         background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+         color: white;
+     }
+     
+     .modal-actions .btn.secondary {
+         background: #6c757d;
+         color: white;
+     }
+     
+     .modal-actions .btn:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+     }
+     
+     @keyframes fadeIn {
+         from { opacity: 0; }
+         to { opacity: 1; }
+     }
+     
+     @keyframes slideInUp {
+         from {
+             opacity: 0;
+             transform: translateY(30px);
+         }
+         to {
+             opacity: 1;
+             transform: translateY(0);
+         }
+     }
+     
+     @keyframes bounceIn {
+         0% {
+             opacity: 0;
+             transform: scale(0.3);
+         }
+         50% {
+             opacity: 1;
+             transform: scale(1.05);
+         }
+         70% {
+             transform: scale(0.9);
+         }
+         100% {
+             opacity: 1;
+             transform: scale(1);
+         }
+     }
 `;
 document.head.appendChild(style);
 
@@ -1619,6 +1886,7 @@ function displayAPIResult(imageBase64) {
                 resultCanvas.style.display = 'block';
                 resultPanel.style.display = 'block';
                 showResultActions();
+                showPlaceOrderButton(); // Add place order button after API result
                 
                 // Scroll to result
                 resultPanel.scrollIntoView({ behavior: 'smooth' });
@@ -1647,6 +1915,9 @@ function displayAPIResult(imageBase64) {
                     </button>
                     <button class="btn secondary" onclick="shareAPIResult()">
                         <i class="fas fa-share"></i> Share
+                    </button>
+                    <button class="btn primary place-order-btn" onclick="placeOrder()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-shopping-cart"></i> Place Order
                     </button>
                 </div>
             `;
